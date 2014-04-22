@@ -198,7 +198,7 @@ bambu.analytics.on('track',
 This way you can write an analytics provider that works on all sites that
 use Bambu Analytics. Both of them!
 
-### Writing a server-side provider
+### Writing a server-side provider
 
 If you want to track your own events or you have a server-side analytics tool
 that you want to hook into, you'll write a provider that focuses on teh back-
