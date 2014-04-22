@@ -1,0 +1,337 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Bambu Analytics &mdash; Bambu Analytics 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Bambu Analytics 0.3 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="#">Bambu Analytics 0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="bambu-analytics">
+<h1>Bambu Analytics<a class="headerlink" href="#bambu-analytics" title="Permalink to this headline">¶</a></h1>
+<p>Provides a simple, pluggable system for analytics</p>
+<div class="section" id="about-bambu-analytics">
+<h2>About Bambu Analytics<a class="headerlink" href="#about-bambu-analytics" title="Permalink to this headline">¶</a></h2>
+<p>Bambu Analytics provides a simple system for implementing analytics
+tools like Google Analytics into your Django projects, so you can track
+page views, goals and events.</p>
+<p>By default it supports Google&#8217;s <a class="reference external" href="https://support.google.com/analytics/answer/2790010?hl=en-GB">Universal
+Analytics</a>
+programme, but you interact with the package within JavaScript via the
+<tt class="docutils literal"><span class="pre">bambu.analytics</span></tt> namespace. This way, you can change analytics
+providers (or write your own) without changing the code within the rest
+of your site.</p>
+<p>This is massively a work-in-progress.</p>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>Install the package via Pip:</p>
+<div class="highlight-python"><div class="highlight"><pre>pip install bambu-analytics
+</pre></div>
+</div>
+<p>Add it to your <tt class="docutils literal"><span class="pre">INSTALLED_APPS</span></tt> list:</p>
+<div class="code python highlight-python"><div class="highlight"><pre>INSTALLED_APPS = (
+    ...
+    &#39;bambu.analytics&#39;
+)
+</pre></div>
+</div>
+<p>Next, install the tracking middleware:</p>
+<div class="code python highlight-python"><div class="highlight"><pre>MIDDLEWARE_CLASSES = (
+    ...
+    &#39;bambu.analytics.middleware.AnalyticsMiddleware&#39;,
+    ...
+)
+</pre></div>
+</div>
+<p>Finally, set your Google Analytics ID:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">ANALYTICS_SETTINGS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;UniversalAnalyticsProvider&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">&#39;ID&#39;</span><span class="p">:</span> <span class="s">&#39;UA-XXXXXXXX-XX&#39;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Or, use the shortcut setting:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">GOOGLE_ANALYTICS_IDS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;UA-XXXXXXXX-XX&#39;</span><span class="p">,)</span>
+</pre></div>
+</div>
+<p>(This is a legacy setting that will be deprecated in a future release)</p>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>By default, all page views will be tracked once you include the
+<tt class="docutils literal"><span class="pre">tracking</span></tt> template tag in your base HTML template, like so:</p>
+<div class="code html highlight-python"><div class="highlight"><pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    ...
+    &lt;body&gt;
+        ...
+        {% load analytics %}{% tracking %}
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre></div>
+</div>
+<p>Tracking events are gathered by the middleware, as it allows trackable
+events to be defined server-side. For example, when you submit an
+enquiry form, you can add an event that will be tracked once the user is
+redirected to the &#8216;thank you&#8217; page.</p>
+</div>
+<div class="section" id="the-workflow">
+<h2>The workflow<a class="headerlink" href="#the-workflow" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>The user requests a URL</li>
+<li>The analytics middleware adds a page-view event to its tracking list</li>
+<li>The view for that URL is rendered, and the script containing the
+analytics setup code and the tracked event from step 2 is rendered</li>
+<li>The user submits a form on the page</li>
+<li>The view for that form calls <tt class="docutils literal"><span class="pre">bambu.analytics.track_event</span></tt></li>
+<li>An HTTP redirect is issued</li>
+<li>The middleware reads the redirect and stores the tracking event in a
+session variable</li>
+<li>The user&#8217;s browser is redirected to a &#8216;thank you&#8217; page</li>
+<li>When the &#8216;thank you&#8217; page is rendered, the tracking event stored in
+the session variable are read into JavaScript and rendered</li>
+</ol>
+<p>All of this sounds complex, but actually means you can track events more
+easily and in a pluggable, product-agnostic way. It also provides the
+option for server-side analytics events to be tracked.</p>
+<p>In Google Analytics, the practical upshot is that it uses events rather
+than goals, meaning you don&#8217;t have to manually define them in your
+Analytics property.</p>
+</div>
+<div class="section" id="tracking-an-event">
+<h2>Tracking an event<a class="headerlink" href="#tracking-an-event" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s say you have a contact form. In the view that receives the form
+data, you want to track the successful submission of form data and then
+redirect the user to a page thanking them for getting in touch.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">bambu.analytics</span> <span class="kn">import</span> <span class="n">track_event</span><span class="p">,</span> <span class="n">events</span>
+
+<span class="k">def</span> <span class="nf">enquiry_form</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="c"># Handle submission of form data</span>
+
+    <span class="n">track_event</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">events</span><span class="o">.</span><span class="n">EVENT</span><span class="p">,</span>
+        <span class="n">category</span> <span class="o">=</span> <span class="s">u&#39;Enquiry&#39;</span><span class="p">,</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="s">u&#39;Submit&#39;</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>Here, <tt class="docutils literal"><span class="pre">events.EVENT</span></tt> is a constant meaning &#8216;a standard event&#8217;.</p>
+<p>If you&#8217;re using a client-side analytics library (like Google Analytics),
+you should only track events in this way if you&#8217;re going to redirect the
+user back to a page that will load and render the <tt class="docutils literal"><span class="pre">tracking</span></tt> template
+tag. Otherwise the event will be stored in the user&#8217;s session cookie,
+but won&#8217;t be tracked by your provider.</p>
+<p>If you&#8217;re using a server-side provider - or you&#8217;ve written one, a:
+please let me know! but b: - this method should work fine.</p>
+</div>
+<div class="section" id="trackable-events">
+<h2>Trackable events<a class="headerlink" href="#trackable-events" title="Permalink to this headline">¶</a></h2>
+<p>There are four types of trackable event within Bambu Analytics, but not
+all of them are setup to work with Google&#8217;s Universal Analytics just
+yet.</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">events.PAGE</span></tt>: a page view (this is handled automatically by
+middleware)</li>
+<li><tt class="docutils literal"><span class="pre">events.EVENT</span></tt>: something of note happening on the site, that you
+want to measure</li>
+<li><tt class="docutils literal"><span class="pre">events.TRANSACTION</span></tt>: a monetary transaction</li>
+<li><tt class="docutils literal"><span class="pre">events.TRANSACTION_ITEM</span></tt>: part of an order (an item in someone&#8217;s
+shopping cart)</li>
+</ul>
+<p>The last two haven&#8217;t been properly hooked up to Google&#8217;s new system, but
+you can use the legacy provider (see below).</p>
+</div>
+<div class="section" id="changing-analytics-provider">
+<h2>Changing analytics provider<a class="headerlink" href="#changing-analytics-provider" title="Permalink to this headline">¶</a></h2>
+<p>Bambu Analytics supports the legacy (ua.js) and new (analytics.js)
+scripts as provided by Google. ecommerce is setup to work with the old
+style (ua.js), so if you need to track ecommerce events, you should
+change the provider via your Django settings file:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">ANALYTICS_PROVIDER</span> <span class="o">=</span> <span class="s">&#39;bambu.analytics.providers.google.GoogleAnalyticsProvider&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="writing-your-own-provider">
+<h2>Writing your own provider<a class="headerlink" href="#writing-your-own-provider" title="Permalink to this headline">¶</a></h2>
+<p>It&#8217;s pretty easy to write your own provider. Start by taking a look at
+the two classes in <tt class="docutils literal"><span class="pre">bambu.analytics.providers.google</span></tt> to see how
+they&#8217;re hooked up.</p>
+<p>Essentially the job of a provider is to take Python objects that refer
+to events and turn them into JavaScript objects and function calls that
+your analytics library can understand.</p>
+<p>Each provider needs to render a string. For client-side analytics tools
+this should contain HTML with a <tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> tag. The first thing inside
+that tag should be:</p>
+<div class="highlight-python"><div class="highlight"><pre>{% include &#39;analytics/bambu.inc.js&#39; %}
+</pre></div>
+</div>
+<p>This exposes the <tt class="docutils literal"><span class="pre">bambu.analytics</span></tt> namespace. After all the code
+needed to hook up the analytics tool and track basic events, your
+provider should bind to the <tt class="docutils literal"><span class="pre">track</span></tt> event within <tt class="docutils literal"><span class="pre">bambu.analytics</span></tt>
+like this:</p>
+<div class="code javascript highlight-python"><div class="highlight"><pre>bambu.analytics.on(&#39;track&#39;,
+    function(e) {
+        // e.event contains the name of the event, which you can compare
+        // against the constants in the bambu.analytics namespace (they&#39;re)
+        // the same as the ones within the Python package.
+
+        // e.args contains a dictionary of arguments that you can use to map
+        // the Python-defined keyword args (like &#39;category&#39; or &#39;option_value&#39;)
+        // to arguments that your specific analytics library understands. See
+        // the templates/analytics/universal.inc.html file for an idea of
+        // how this works.
+    }
+);
+</pre></div>
+</div>
+<p>This way you can write an analytics provider that works on all sites
+that use Bambu Analytics. Both of them!</p>
+<div class="section" id="writing-a-server-side-provider">
+<h3>&nbsp;Writing a server-side provider<a class="headerlink" href="#writing-a-server-side-provider" title="Permalink to this headline">¶</a></h3>
+<p>If you want to track your own events or you have a server-side analytics
+tool that you want to hook into, you&#8217;ll write a provider that focuses on
+teh back- rather than front-end. You&#8217;ll still need to render something,
+but this can be an empty string, or some sort of tracking pixel if
+that&#8217;s the route you want to go down.</p>
+</div>
+</div>
+<div class="section" id="ajax-and-client-side-tracking">
+<h2>AJAX and client-side tracking<a class="headerlink" href="#ajax-and-client-side-tracking" title="Permalink to this headline">¶</a></h2>
+<p>If you want to track events client-side, or you&#8217;re running a site that
+uses a lot of AJAX (like <a class="reference external" href="http://poddle.fm/">Poddle.fm</a>), you&#8217;ll get
+automatic access to the <tt class="docutils literal"><span class="pre">bambu.analytics</span></tt> namespace within JavaScript,
+and you can call <tt class="docutils literal"><span class="pre">track()</span></tt> to handle client-side events or AJAX page
+updates (ie: via <tt class="docutils literal"><span class="pre">window.pushstate</span></tt>).</p>
+<p>Here&#8217;s an example event used on Poddle.fm when a user clicks the Play
+button on an episode of a podcast:</p>
+<div class="code html highlight-python"><div class="highlight"><pre>&lt;script&gt;
+    $(&#39;a.btn-play&#39;).on(&#39;click&#39;,
+        function() {
+            // Play the audio
+            ...
+
+            // Track the click event
+            bambu.analytics.track(
+                bambu.analytics.EVENT,
+                {
+                    category: &#39;Audio&#39;,
+                    action: &#39;play&#39;
+                }
+            );
+        }
+    );
+&lt;/script&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="todo">
+<h2>Todo<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Implement ecommerce into the Universal Analytics provider</li>
+</ul>
+</div>
+<div class="section" id="questions-or-suggestions">
+<h2>Questions or suggestions?<a class="headerlink" href="#questions-or-suggestions" title="Permalink to this headline">¶</a></h2>
+<p>Find me on Twitter (&#64;iamsteadman) or <a class="reference external" href="http://steadman.io/">visit my blog</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Bambu Analytics</a><ul>
+<li><a class="reference internal" href="#about-bambu-analytics">About Bambu Analytics</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#the-workflow">The workflow</a></li>
+<li><a class="reference internal" href="#tracking-an-event">Tracking an event</a></li>
+<li><a class="reference internal" href="#trackable-events">Trackable events</a></li>
+<li><a class="reference internal" href="#changing-analytics-provider">Changing analytics provider</a></li>
+<li><a class="reference internal" href="#writing-your-own-provider">Writing your own provider</a><ul>
+<li><a class="reference internal" href="#writing-a-server-side-provider">&nbsp;Writing a server-side provider</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ajax-and-client-side-tracking">AJAX and client-side tracking</a></li>
+<li><a class="reference internal" href="#todo">Todo</a></li>
+<li><a class="reference internal" href="#questions-or-suggestions">Questions or suggestions?</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="#">Bambu Analytics 0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Steadman.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
