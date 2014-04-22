@@ -64,14 +64,14 @@ of your site.</p>
 </pre></div>
 </div>
 <p>Add it to your <tt class="docutils literal"><span class="pre">INSTALLED_APPS</span></tt> list:</p>
-<div class="code python highlight-python"><div class="highlight"><pre>INSTALLED_APPS = (
+<div class="highlight-python"><div class="highlight"><pre>INSTALLED_APPS = (
     ...
     &#39;bambu.analytics&#39;
 )
 </pre></div>
 </div>
 <p>Next, install the tracking middleware:</p>
-<div class="code python highlight-python"><div class="highlight"><pre>MIDDLEWARE_CLASSES = (
+<div class="highlight-python"><div class="highlight"><pre>MIDDLEWARE_CLASSES = (
     ...
     &#39;bambu.analytics.middleware.AnalyticsMiddleware&#39;,
     ...
@@ -79,7 +79,7 @@ of your site.</p>
 </pre></div>
 </div>
 <p>Finally, set your Google Analytics ID:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">ANALYTICS_SETTINGS</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ANALYTICS_SETTINGS</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s">&#39;UniversalAnalyticsProvider&#39;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s">&#39;ID&#39;</span><span class="p">:</span> <span class="s">&#39;UA-XXXXXXXX-XX&#39;</span>
     <span class="p">}</span>
@@ -87,7 +87,7 @@ of your site.</p>
 </pre></div>
 </div>
 <p>Or, use the shortcut setting:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">GOOGLE_ANALYTICS_IDS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;UA-XXXXXXXX-XX&#39;</span><span class="p">,)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GOOGLE_ANALYTICS_IDS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;UA-XXXXXXXX-XX&#39;</span><span class="p">,)</span>
 </pre></div>
 </div>
 <p>(This is a legacy setting that will be deprecated in a future release)</p>
@@ -96,7 +96,7 @@ of your site.</p>
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>By default, all page views will be tracked once you include the
 <tt class="docutils literal"><span class="pre">tracking</span></tt> template tag in your base HTML template, like so:</p>
-<div class="code html highlight-python"><div class="highlight"><pre>&lt;!DOCTYPE html&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
     ...
     &lt;body&gt;
@@ -139,7 +139,7 @@ Analytics property.</p>
 <p>Let&#8217;s say you have a contact form. In the view that receives the form
 data, you want to track the successful submission of form data and then
 redirect the user to a page thanking them for getting in touch.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">bambu.analytics</span> <span class="kn">import</span> <span class="n">track_event</span><span class="p">,</span> <span class="n">events</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">bambu.analytics</span> <span class="kn">import</span> <span class="n">track_event</span><span class="p">,</span> <span class="n">events</span>
 
 <span class="k">def</span> <span class="nf">enquiry_form</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="c"># Handle submission of form data</span>
@@ -182,7 +182,7 @@ you can use the legacy provider (see below).</p>
 scripts as provided by Google. ecommerce is setup to work with the old
 style (ua.js), so if you need to track ecommerce events, you should
 change the provider via your Django settings file:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">ANALYTICS_PROVIDER</span> <span class="o">=</span> <span class="s">&#39;bambu.analytics.providers.google.GoogleAnalyticsProvider&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ANALYTICS_PROVIDER</span> <span class="o">=</span> <span class="s">&#39;bambu.analytics.providers.google.GoogleAnalyticsProvider&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -204,7 +204,7 @@ that tag should be:</p>
 needed to hook up the analytics tool and track basic events, your
 provider should bind to the <tt class="docutils literal"><span class="pre">track</span></tt> event within <tt class="docutils literal"><span class="pre">bambu.analytics</span></tt>
 like this:</p>
-<div class="code javascript highlight-python"><div class="highlight"><pre>bambu.analytics.on(&#39;track&#39;,
+<div class="highlight-python"><div class="highlight"><pre>bambu.analytics.on(&#39;track&#39;,
     function(e) {
         // e.event contains the name of the event, which you can compare
         // against the constants in the bambu.analytics namespace (they&#39;re)
@@ -222,7 +222,7 @@ like this:</p>
 <p>This way you can write an analytics provider that works on all sites
 that use Bambu Analytics. Both of them!</p>
 <div class="section" id="writing-a-server-side-provider">
-<h3>&nbsp;Writing a server-side provider<a class="headerlink" href="#writing-a-server-side-provider" title="Permalink to this headline">¶</a></h3>
+<h3>Writing a server-side provider<a class="headerlink" href="#writing-a-server-side-provider" title="Permalink to this headline">¶</a></h3>
 <p>If you want to track your own events or you have a server-side analytics
 tool that you want to hook into, you&#8217;ll write a provider that focuses on
 teh back- rather than front-end. You&#8217;ll still need to render something,
@@ -239,7 +239,7 @@ and you can call <tt class="docutils literal"><span class="pre">track()</span></
 updates (ie: via <tt class="docutils literal"><span class="pre">window.pushstate</span></tt>).</p>
 <p>Here&#8217;s an example event used on Poddle.fm when a user clicks the Play
 button on an episode of a podcast:</p>
-<div class="code html highlight-python"><div class="highlight"><pre>&lt;script&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;script&gt;
     $(&#39;a.btn-play&#39;).on(&#39;click&#39;,
         function() {
             // Play the audio
@@ -288,7 +288,7 @@ button on an episode of a podcast:</p>
 <li><a class="reference internal" href="#trackable-events">Trackable events</a></li>
 <li><a class="reference internal" href="#changing-analytics-provider">Changing analytics provider</a></li>
 <li><a class="reference internal" href="#writing-your-own-provider">Writing your own provider</a><ul>
-<li><a class="reference internal" href="#writing-a-server-side-provider">&nbsp;Writing a server-side provider</a></li>
+<li><a class="reference internal" href="#writing-a-server-side-provider">Writing a server-side provider</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#ajax-and-client-side-tracking">AJAX and client-side tracking</a></li>
