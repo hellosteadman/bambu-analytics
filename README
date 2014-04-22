@@ -11,7 +11,7 @@ tools like Google Analytics into your Django projects, so you can track
 page views, goals and events.
 
 By default it supports Google's `Universal
-Analytics <https://support.google.com/analytics/answer/2790010?hl=en-GB>`__
+Analytics <https://support.google.com/analytics/answer/2790010?hl=en-GB>`_
 programme, but you interact with the package within JavaScript via the
 ``bambu.analytics`` namespace. This way, you can change analytics
 providers (or write your own) without changing the code within the rest
@@ -30,7 +30,7 @@ Install the package via Pip:
 
 Add it to your ``INSTALLED_APPS`` list:
 
-.. code:: python
+::
 
     INSTALLED_APPS = (
         ...
@@ -39,7 +39,7 @@ Add it to your ``INSTALLED_APPS`` list:
 
 Next, install the tracking middleware:
 
-.. code:: python
+::
 
     MIDDLEWARE_CLASSES = (
         ...
@@ -49,7 +49,7 @@ Next, install the tracking middleware:
 
 Finally, set your Google Analytics ID:
 
-.. code:: python
+::
 
     ANALYTICS_SETTINGS = {
         'UniversalAnalyticsProvider': {
@@ -59,7 +59,7 @@ Finally, set your Google Analytics ID:
 
 Or, use the shortcut setting:
 
-.. code:: python
+::
 
     GOOGLE_ANALYTICS_IDS = ('UA-XXXXXXXX-XX',)
 
@@ -71,7 +71,7 @@ Usage
 By default, all page views will be tracked once you include the
 ``tracking`` template tag in your base HTML template, like so:
 
-.. code:: html
+::
 
     <!DOCTYPE html>
     <html>
@@ -118,7 +118,7 @@ Let's say you have a contact form. In the view that receives the form
 data, you want to track the successful submission of form data and then
 redirect the user to a page thanking them for getting in touch.
 
-.. code:: python
+::
 
     from bambu.analytics import track_event, events
 
@@ -167,7 +167,7 @@ scripts as provided by Google. ecommerce is setup to work with the old
 style (ua.js), so if you need to track ecommerce events, you should
 change the provider via your Django settings file:
 
-.. code:: python
+::
 
     ANALYTICS_PROVIDER = 'bambu.analytics.providers.google.GoogleAnalyticsProvider'
 
@@ -195,7 +195,7 @@ needed to hook up the analytics tool and track basic events, your
 provider should bind to the ``track`` event within ``bambu.analytics``
 like this:
 
-.. code:: javascript
+::
 
     bambu.analytics.on('track',
         function(e) {
@@ -227,7 +227,7 @@ AJAX and client-side tracking
 -----------------------------
 
 If you want to track events client-side, or you're running a site that
-uses a lot of AJAX (like `Poddle.fm <http://poddle.fm/>`__), you'll get
+uses a lot of AJAX (like `Poddle.fm <http://poddle.fm/>`_), you'll get
 automatic access to the ``bambu.analytics`` namespace within JavaScript,
 and you can call ``track()`` to handle client-side events or AJAX page
 updates (ie: via ``window.pushstate``).
@@ -235,7 +235,7 @@ updates (ie: via ``window.pushstate``).
 Here's an example event used on Poddle.fm when a user clicks the Play
 button on an episode of a podcast:
 
-.. code:: html
+::
 
     <script>
         $('a.btn-play').on('click',
@@ -263,4 +263,4 @@ Todo
 Questions or suggestions?
 -------------------------
 
-Find me on Twitter (@iamsteadman) or `visit my blog <http://steadman.io/>`__.
+Find me on Twitter (@iamsteadman) or `visit my blog <http://steadman.io/>`_.
