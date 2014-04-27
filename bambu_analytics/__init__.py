@@ -42,10 +42,10 @@ def track_event(request, event, **kwargs):
     Let's say you have a contact form. In the view that receives the form
     data, you want to track the successful submission of form data and then
     redirect the user to a page thanking them for getting in touch.
-
+    
     >>> from bambu_analytics import track_event, events
     >>> def enquiry_form(request):
-    >>> track_event(request, events.EVENT,
+    >>>     track_event(request, events.EVENT,
     >>>     category = u'Enquiry',
     >>>     action = u'Submit'
     >>> )
