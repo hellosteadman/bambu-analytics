@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tracking an event &mdash; Bambu Analytics 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Bambu Analytics 0.3 documentation" href="index.html" />
+    <link rel="next" title="Providers" href="providers.html" />
+    <link rel="prev" title="The workflow" href="workflow.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="providers.html" title="Providers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="workflow.html" title="The workflow"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Bambu Analytics 0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-bambu_analytics">
+<span id="tracking-an-event"></span><h1>Tracking an event<a class="headerlink" href="#module-bambu_analytics" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="bambu_analytics.add_events_from_redirect">
+<tt class="descclassname">bambu_analytics.</tt><tt class="descname">add_events_from_redirect</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#bambu_analytics.add_events_from_redirect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add trakcing events from a previous request on the same session
+to the current event queue for this request</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="bambu_analytics.track_event">
+<tt class="descclassname">bambu_analytics.</tt><tt class="descname">track_event</tt><big>(</big><em>request</em>, <em>event</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#bambu_analytics.track_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Let&#8217;s say you have a contact form. In the view that receives the form
+data, you want to track the successful submission of form data and then
+redirect the user to a page thanking them for getting in touch.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">bambu_analytics</span> <span class="kn">import</span> <span class="n">track_event</span><span class="p">,</span> <span class="n">events</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">enquiry_form</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">track_event</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">events</span><span class="o">.</span><span class="n">EVENT</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">category</span> <span class="o">=</span> <span class="s">u&#39;Enquiry&#39;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">action</span> <span class="o">=</span> <span class="s">u&#39;Submit&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here, <tt class="docutils literal"><span class="pre">events.EVENT</span></tt> is a constant meaning &#8216;a standard event&#8217;.</p>
+<p>If you&#8217;re using a client-side analytics library (like Google Analytics),
+you should only track events in this way if you&#8217;re going to redirect the
+user back to a page that will load and render the <tt class="docutils literal"><span class="pre">tracking</span></tt> template
+tag. Otherwise the event will be stored in the user&#8217;s session cookie,
+but won&#8217;t be tracked by your provider.</p>
+</dd></dl>
+
+<p>If you&#8217;re using a server-side provider - or you&#8217;ve written one, a:
+please let me know! but b: - this method should work fine.</p>
+<div class="section" id="module-bambu_analytics.events">
+<span id="trackable-events"></span><h2>Trackable events<a class="headerlink" href="#module-bambu_analytics.events" title="Permalink to this headline">¶</a></h2>
+<p>There are four types of trackable event within Bambu Analytics, but not
+all of them are setup to work with Google&#8217;s Universal Analytics just
+yet.</p>
+<p>The last two haven&#8217;t been properly hooked up to Google&#8217;s new system, but
+you can use the legacy provider (see below).</p>
+<dl class="data">
+<dt id="bambu_analytics.events.EVENT">
+<tt class="descclassname">bambu_analytics.events.</tt><tt class="descname">EVENT</tt><em class="property"> = 'event'</em><a class="headerlink" href="#bambu_analytics.events.EVENT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Something of note happening on the site, that you want to measure</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="bambu_analytics.events.PAGE">
+<tt class="descclassname">bambu_analytics.events.</tt><tt class="descname">PAGE</tt><em class="property"> = 'page'</em><a class="headerlink" href="#bambu_analytics.events.PAGE" title="Permalink to this definition">¶</a></dt>
+<dd><p>A page view (this is handled automatically by middleware)</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="bambu_analytics.events.TRANSACTION">
+<tt class="descclassname">bambu_analytics.events.</tt><tt class="descname">TRANSACTION</tt><em class="property"> = 'transaction'</em><a class="headerlink" href="#bambu_analytics.events.TRANSACTION" title="Permalink to this definition">¶</a></dt>
+<dd><p>A monetary transaction</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="bambu_analytics.events.TRANSACTION_ITEM">
+<tt class="descclassname">bambu_analytics.events.</tt><tt class="descname">TRANSACTION_ITEM</tt><em class="property"> = 'transaction_item'</em><a class="headerlink" href="#bambu_analytics.events.TRANSACTION_ITEM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Part of an order (an item in someone&#8217;s shopping cart)</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tracking an event</a><ul>
+<li><a class="reference internal" href="#module-bambu_analytics.events">Trackable events</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="workflow.html"
+                        title="previous chapter">The workflow</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="providers.html"
+                        title="next chapter">Providers</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tracking.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="providers.html" title="Providers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="workflow.html" title="The workflow"
+             >previous</a> |</li>
+        <li><a href="index.html">Bambu Analytics 0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Steadman.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

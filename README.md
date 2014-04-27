@@ -28,7 +28,7 @@ Add it to your `INSTALLED_APPS` list:
 ```python
 INSTALLED_APPS = (
     ...
-    'bambu.analytics'
+    'bambu_analytics'
 )
 ```
 
@@ -37,7 +37,7 @@ Next, install the tracking middleware:
 ```python
 MIDDLEWARE_CLASSES = (
     ...
-    'bambu.analytics.middleware.AnalyticsMiddleware',
+    'bambu_analytics.middleware.AnalyticsMiddleware',
     ...
 )
 ```
@@ -88,7 +88,7 @@ can add an event that will be tracked once the user is redirected to the
 3. The view for that URL is rendered, and the script containing the analytics
 setup code and the tracked event from step 2 is rendered
 4. The user submits a form on the page
-5. The view for that form calls `bambu.analytics.track_event`
+5. The view for that form calls `bambu_analytics.track_event`
 6. An HTTP redirect is issued
 7. The middleware reads the redirect and stores the tracking event in a
 session variable
@@ -111,7 +111,7 @@ you want to track the successful submission of form data and then redirect
 the user to a page thanking them for getting in touch.
 
 ```python
-from bambu.analytics import track_event, events
+from bambu_analytics import track_event, events
 
 def enquiry_form(request):
     # Handle submission of form data
@@ -155,13 +155,13 @@ so if you need to track ecommerce events, you should change the provider via
 your Django settings file:
 
 ```python
-ANALYTICS_PROVIDER = 'bambu.analytics.providers.google.GoogleAnalyticsProvider'
+ANALYTICS_PROVIDER = 'bambu_analytics.providers.google.GoogleAnalyticsProvider'
 ```
 
 ## Writing your own provider
 
 It's pretty easy to write your own provider. Start by taking a look at the
-two classes in `bambu.analytics.providers.google` to see how they're hooked up.
+two classes in `bambu_analytics.providers.google` to see how they're hooked up.
 
 Essentially the job of a provider is to take Python objects that refer to
 events and turn them into JavaScript objects and function calls that your
@@ -239,7 +239,6 @@ an episode of a podcast:
 ## Todo
 
 * Implement ecommerce into the Universal Analytics provider
-
 
 ## Questions or suggestions?
 

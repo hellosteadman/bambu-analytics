@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Index &mdash; Bambu Analytics 0.3 documentation</title>
+    <title>AJAX and client-side tracking &mdash; Bambu Analytics 0.3 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -24,18 +23,26 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Bambu Analytics 0.3 documentation" href="index.html" /> 
+    <link rel="top" title="Bambu Analytics 0.3 documentation" href="index.html" />
+    <link rel="next" title="Settings" href="settings.html" />
+    <link rel="prev" title="Providers" href="providers.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="#" title="General Index"
+          <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="settings.html" title="Settings"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="providers.html" title="Providers"
+             accesskey="P">previous</a> |</li>
         <li><a href="index.html">Bambu Analytics 0.3 documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -45,87 +52,35 @@
         <div class="bodywrapper">
           <div class="body">
             
+  <div class="section" id="ajax-and-client-side-tracking">
+<h1>AJAX and client-side tracking<a class="headerlink" href="#ajax-and-client-side-tracking" title="Permalink to this headline">¶</a></h1>
+<p>If you want to track events client-side, or you&#8217;re running a site that
+uses a lot of AJAX (like <a class="reference external" href="http://poddle.fm/">Poddle.fm</a>), you&#8217;ll get
+automatic access to the <tt class="docutils literal"><span class="pre">bambu.analytics</span></tt> namespace within JavaScript,
+and you can call <tt class="docutils literal"><span class="pre">track()</span></tt> to handle client-side events or AJAX page
+updates (ie: via <tt class="docutils literal"><span class="pre">window.pushstate</span></tt>).</p>
+<p>Here&#8217;s an example event used on Poddle.fm when a user clicks the Play
+button on an episode of a podcast:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;script&gt;
+    $(&#39;a.btn-play&#39;).on(&#39;click&#39;,
+        function() {
+            // Play the audio
+            ...
 
-<h1 id="index">Index</h1>
-
-<div class="genindex-jumpbox">
- <a href="#A"><strong>A</strong></a>
- | <a href="#B"><strong>B</strong></a>
- | <a href="#E"><strong>E</strong></a>
- | <a href="#P"><strong>P</strong></a>
- | <a href="#T"><strong>T</strong></a>
- 
+            // Track the click event
+            bambu.analytics.track(
+                bambu.analytics.EVENT,
+                {
+                    category: &#39;Audio&#39;,
+                    action: &#39;play&#39;
+                }
+            );
+        }
+    );
+&lt;/script&gt;
+</pre></div>
 </div>
-<h2 id="A">A</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%" valign="top"><dl>
-      
-  <dt><a href="tracking.html#bambu_analytics.add_events_from_redirect">add_events_from_redirect() (in module bambu_analytics)</a>
-  </dt>
-
-  </dl></td>
-</tr></table>
-
-<h2 id="B">B</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%" valign="top"><dl>
-      
-  <dt><a href="tracking.html#module-bambu_analytics">bambu_analytics (module)</a>
-  </dt>
-
-      
-  <dt><a href="tracking.html#module-bambu_analytics.events">bambu_analytics.events (module)</a>
-  </dt>
-
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
-      
-  <dt><a href="settings.html#module-bambu_analytics.settings">bambu_analytics.settings (module)</a>
-  </dt>
-
-  </dl></td>
-</tr></table>
-
-<h2 id="E">E</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%" valign="top"><dl>
-      
-  <dt><a href="tracking.html#bambu_analytics.events.EVENT">EVENT (in module bambu_analytics.events)</a>
-  </dt>
-
-  </dl></td>
-</tr></table>
-
-<h2 id="P">P</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%" valign="top"><dl>
-      
-  <dt><a href="tracking.html#bambu_analytics.events.PAGE">PAGE (in module bambu_analytics.events)</a>
-  </dt>
-
-  </dl></td>
-</tr></table>
-
-<h2 id="T">T</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%" valign="top"><dl>
-      
-  <dt><a href="tracking.html#bambu_analytics.track_event">track_event() (in module bambu_analytics)</a>
-  </dt>
-
-      
-  <dt><a href="tracking.html#bambu_analytics.events.TRANSACTION">TRANSACTION (in module bambu_analytics.events)</a>
-  </dt>
-
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
-      
-  <dt><a href="tracking.html#bambu_analytics.events.TRANSACTION_ITEM">TRANSACTION_ITEM (in module bambu_analytics.events)</a>
-  </dt>
-
-  </dl></td>
-</tr></table>
-
+</div>
 
 
           </div>
@@ -133,9 +88,17 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-
-   
-
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="providers.html"
+                        title="previous chapter">Providers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="settings.html"
+                        title="next chapter">Settings</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/ajax.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
@@ -157,11 +120,17 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="#" title="General Index"
+          <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="settings.html" title="Settings"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="providers.html" title="Providers"
+             >previous</a> |</li>
         <li><a href="index.html">Bambu Analytics 0.3 documentation</a> &raquo;</li> 
       </ul>
     </div>

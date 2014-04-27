@@ -2,8 +2,8 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from django.template.defaultfilters import escapejs
 from django.utils.safestring import mark_safe
-from bambu.analytics import events
-from bambu.analytics.providers import ProviderBase
+from bambu_analytics import events
+from bambu_analytics.providers import ProviderBase
 from copy import copy
 import logging
 
@@ -12,7 +12,7 @@ try:
 except ImportError:
 	from django.utils import simplejson as json
 
-LOGGER = logging.getLogger('bambu.analytics')
+LOGGER = logging.getLogger('bambu_analytics')
 
 class GoogleAnalyticsProvider(ProviderBase):
 	EVENT_EVENT = '_trackEvent'

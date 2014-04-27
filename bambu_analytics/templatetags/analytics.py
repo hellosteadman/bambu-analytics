@@ -2,13 +2,13 @@ from django.template import Library
 from logging import getLogger
 
 register = Library()
-LOGGER = getLogger('bambu.analytics')
+LOGGER = getLogger('bambu_analytics')
 
 @register.simple_tag(takes_context = True)
 def tracking(context):
 	request = context.get('request')
 	if not request:
-		return u''
+		return u'<script>console.error(\'Current request object not found in Django template context\');</script>'
 	
 	if getattr(request, '_analytics_handler', None):
 		try:
