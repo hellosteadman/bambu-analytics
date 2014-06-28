@@ -78,10 +78,10 @@
         }
     );
 
-    ga('create', '{{ id }}', '{{ domain }}');
+    {% if id %}ga('create', '{{ id }}', '{{ domain }}');
     {% for item in queue %}ga({{ item|join:', ' }});
     {% if DEBUG %}if(console) {
         console.log('Analytics event:', {{ item|join:', ' }});
     }{% endif %}
-    {% endfor %}
+    {% endfor %}{% endif %}
 </script>

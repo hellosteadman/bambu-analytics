@@ -197,7 +197,9 @@ class UniversalAnalyticsProvider(ProviderBase):
 	def render(self, request):
 		if not self.settings.get('ID'):
 			LOGGER.warn(u'No Google Analytics ID specified')
-			return
+			return render_to_string(
+				'analytics/universal.inc.html'
+			)
 
 		queue = []
 		for (event, args) in self.events:

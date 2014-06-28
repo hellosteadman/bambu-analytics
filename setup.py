@@ -4,7 +4,7 @@ from os import path
 
 setup(
 	name = 'bambu-analytics',
-	version = '2.0',
+	version = '2.0.1',
 	description = 'Provides a simple, pluggable system for analytics in Django',
 	author = 'Steadman',
 	author_email = 'mark@steadman.io',
