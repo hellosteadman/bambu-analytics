@@ -3,6 +3,7 @@
 	// <![CDATA[
 	var _gaq = _gaq || [];
 	_gaq.push(['_setAccount', '{{ id }}']);
+	_gaq.push(['require', 'displayfeatures']);
 	{% for item in queue %}_gaq.push(['{{ item.0 }}', {% for subitem in item.1 %}{{ subitem|safe }}{% if not forloop.last %}, {% endif %}{% endfor %}]);
 	{% if DEBUG %}try {
 		console.log('Analytics event:', '{{ item.0 }}'{% for subitem in item.1 %}, {{ subitem|safe }}{% endfor %});

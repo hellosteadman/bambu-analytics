@@ -79,6 +79,7 @@
     );
 
     {% if id %}ga('create', '{{ id }}', '{{ domain }}');
+    ga('require', 'displayfeatures');
     {% for item in queue %}ga({{ item|join:', ' }});
     {% if DEBUG %}if(console) {
         console.log('Analytics event:', {{ item|join:', ' }});
