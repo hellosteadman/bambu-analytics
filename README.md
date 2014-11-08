@@ -54,7 +54,7 @@ Finally, set your Google Analytics ID:
 ANALYTICS_SETTINGS = {
     'UniversalAnalyticsProvider': {
         'ID': 'UA-XXXXXXXX-XX',
-        'TRACK_USER_ID': True,  # track userId by using request.user.id. Note: 'django.core.context_processors.request' context processor is required!
+        'TRACK_USER_ID': True,  # track userId by using request.user.id. Note: 'django.contrib.auth.middleware.AuthenticationMiddleware' middleware is required
     }
 }
 ```
