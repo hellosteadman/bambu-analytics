@@ -4,8 +4,9 @@ from bambu_analytics import track_event, add_events_from_redirect, events
 class AnalyticsMiddleware(object):
     def process_request(self, request):
         if not add_events_from_redirect(request):
-            track_event(request, events.PAGE,
-                url = request.path
+            track_event(
+                request, events.PAGE,
+                url=request.path
             )
 
     def process_response(self, request, response):
