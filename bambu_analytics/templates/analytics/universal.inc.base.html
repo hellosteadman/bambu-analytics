@@ -80,6 +80,7 @@
 
     {% if id %}
       ga('create', '{{ id }}', 'auto', {'cookieDomain':'{{ domain }}'{% if user_id %}, 'userId': '{{ user_id }}'{% endif %}});
+      {% block extra_script %}{% endblock %}
       {# ga('require', 'ecommerce', 'ecommerce.js'); #}
       {% for item in queue %}ga({{ item|join:', ' }});
         {% if DEBUG %}if(console) {
@@ -88,5 +89,4 @@
         {% endif %}
       {% endfor %}
     {% endif %}
-    {% block extra_script %}{% endblock %}
 </script>
