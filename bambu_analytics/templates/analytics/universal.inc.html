@@ -78,7 +78,7 @@
         }
     );
 
-    {% if id %}ga('create', '{{ id }}', '{{ domain }}');
+    {% if id %}ga('create', '{{ id }}', 'auto', {'cookieDomain':'{{ domain }}'{% if user_id %}, 'userId': '{{ user_id }}'{% endif %}});
     {% for item in queue %}ga({{ item|join:', ' }});
     {% if DEBUG %}if(console) {
         console.log('Analytics event:', {{ item|join:', ' }});

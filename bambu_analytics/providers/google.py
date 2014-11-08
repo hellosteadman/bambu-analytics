@@ -14,6 +14,7 @@ except ImportError:
 
 LOGGER = logging.getLogger('bambu_analytics')
 
+
 class GoogleAnalyticsProvider(ProviderBase):
     EVENT_EVENT = '_trackEvent'
     EVENT_PAGE = '_trackPageview'
@@ -112,7 +113,7 @@ class GoogleAnalyticsProvider(ProviderBase):
             queue.append((event, event_args))
 
         if self.trans and not self.trans_tracked:
-            queue.append(('_trackTrans',));
+            queue.append(('_trackTrans',))
             self.trans_tracked = True
 
         self.events = []
@@ -233,7 +234,7 @@ class UniversalAnalyticsProvider(ProviderBase):
         if self.trans and not self.trans_tracked:
             queue.append(
                 ('require', "'ecommerce'", "'ecommerce.js'")
-            );
+            )
 
             self.trans_tracked = True
 
@@ -241,12 +242,20 @@ class UniversalAnalyticsProvider(ProviderBase):
         self.trans = False
         self.trans_tracked = False
 
+        context = {
+            'id': self.settings['ID'],
+            'domain': request.META.get('HTTP_HOST'),
+            'queue': queue,
+            'DEBUG': getattr(settings, 'DEBUG', True)
+        }
+
+        user_id = getattr(getattr(request, 'user', None), 'id', None)
+        if getattr(self.settings, 'TRACK_USER_ID', False) and user_id:
+            context['user_id'] = user_id
+        else:
+            context['user_id'] = None
+
         return render_to_string(
             'analytics/universal.inc.html',
-            {
-                'id': self.settings['ID'],
-                'domain': request.META.get('HTTP_HOST'),
-                'queue': queue,
-                'DEBUG': getattr(settings, 'DEBUG', True)
-            }
+            context,
         )
