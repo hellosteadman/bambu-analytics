@@ -88,6 +88,19 @@ to be defined server-side. For example, when you submit an enquiry form, you
 can add an event that will be tracked once the user is redirected to the
 'thank you' page.
 
+
+## Customizing defaul providers
+
+You can add extra analytics initializations by overriding templates 'analytics/google.inc.html' and/or 'analytics/universal.inc.html'. Example:
+
+```html
+{% extends 'analytics/universal.inc.base.html' %}
+
+{% block extra_script %}
+    ga('require', 'displayfeatures');
+{% endblock %}
+```
+
 ## The workflow
 
 1. The user requests a URL
