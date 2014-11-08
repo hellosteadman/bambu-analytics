@@ -34,7 +34,7 @@ Add it to your `INSTALLED_APPS` list:
 ```python
 INSTALLED_APPS = (
     ...
-    'bambu_analytics'
+    'bambu_analytics',
 )
 ```
 
