@@ -250,7 +250,7 @@ class UniversalAnalyticsProvider(ProviderBase):
         }
 
         user_id = getattr(getattr(request, 'user', None), 'id', None)
-        if getattr(self.settings, 'TRACK_USER_ID', False) and user_id:
+        if self.settings.get('TRACK_USER_ID', False) and user_id:
             context['user_id'] = user_id
         else:
             context['user_id'] = None
