@@ -34,7 +34,7 @@ Add it to your `INSTALLED_APPS` list:
 ```python
 INSTALLED_APPS = (
     ...
-    'bambu_analytics'
+    'bambu_analytics',
 )
 ```
 
@@ -53,7 +53,9 @@ Finally, set your Google Analytics ID:
 ```python
 ANALYTICS_SETTINGS = {
     'UniversalAnalyticsProvider': {
-        'ID': 'UA-XXXXXXXX-XX'
+        'ID': 'UA-XXXXXXXX-XX',
+        'TRACK_USER_ID': True,  # track userID by using ``request.user.id`` or something else (see next option).
+        'GET_USER_ID_FUNC': lambda request: getattr(getattr(request, 'user', None), 'pk', None),  # this is default function that gets request.user.pk from request as UserID. For example you can add some middleware that generates and sets ``request.analytics_ id`` and your ``"GET_USER_ID_FUNC"`` should be just ``lambda request: request.analytics_id``. Note: 'django.contrib.auth.middleware.AuthenticationMiddleware' middleware is required for default function
     }
 }
 ```
@@ -86,6 +88,19 @@ Tracking events are gathered by the middleware, as it allows trackable events
 to be defined server-side. For example, when you submit an enquiry form, you
 can add an event that will be tracked once the user is redirected to the
 'thank you' page.
+
+
+## Customizing defaul providers
+
+You can add extra analytics initializations by overriding templates 'analytics/google.inc.html' and/or 'analytics/universal.inc.html'. Example:
+
+```html
+{% extends 'analytics/universal.inc.base.html' %}
+
+{% block extra_script %}
+    ga('require', 'displayfeatures');
+{% endblock %}
+```
 
 ## The workflow
 

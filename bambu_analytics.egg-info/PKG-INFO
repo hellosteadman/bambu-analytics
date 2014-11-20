@@ -51,7 +51,7 @@ Description: Bambu Analytics
         
             INSTALLED_APPS = (
                 ...
-                'bambu_analytics'
+                'bambu_analytics',
             )
         
         Next, install the tracking middleware:

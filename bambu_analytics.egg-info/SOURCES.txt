@@ -13,7 +13,9 @@ bambu_analytics.egg-info/top_level.txt
 bambu_analytics/providers/__init__.py
 bambu_analytics/providers/google.py
 bambu_analytics/templates/analytics/bambu.inc.js
+bambu_analytics/templates/analytics/google.inc.base.html
 bambu_analytics/templates/analytics/google.inc.html
+bambu_analytics/templates/analytics/universal.inc.base.html
 bambu_analytics/templates/analytics/universal.inc.html
 bambu_analytics/templatetags/__init__.py
 bambu_analytics/templatetags/analytics.py

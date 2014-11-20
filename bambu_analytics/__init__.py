@@ -6,39 +6,42 @@ from logging import getLogger
 
 LOGGER = getLogger('bambu_analytics')
 
-def _init_tracker(request):
-	"""
-	Setup tracking on a request
-	"""
-	if not getattr(request, '_analytics_handler', None):
-		module, dot, klass = settings.PROVIDER.rpartition('.')
-		module = import_module(module)
-		ps = settings.get(klass)
 
-		klass = getattr(module, klass)
-		request._analytics_handler = klass(**ps)
+def _init_tracker(request):
+    """
+    Setup tracking on a request
+    """
+    if not getattr(request, '_analytics_handler', None):
+        module, dot, klass = settings.PROVIDER.rpartition('.')
+        module = import_module(module)
+        ps = settings.get(klass)
+
+        klass = getattr(module, klass)
+        request._analytics_handler = klass(**ps)
+
 
 def add_events_from_redirect(request):
-	"""
-	Add trakcing events from a previous request on the same session
-	to the current event queue for this request
-	"""
-	events = request.session.get('bambu_analytics.events', [])
+    """
+    Add trakcing events from a previous request on the same session
+    to the current event queue for this request
+    """
+    events = request.session.get('bambu_analytics.events', [])
 
-	if any(events):
-		_init_tracker(request)
-		request._analytics_handler.events.extend(
-			[e for e in events]
-		)
+    if any(events):
+        _init_tracker(request)
+        request._analytics_handler.events.extend(
+            [e for e in events]
+        )
 
-		del request.session['bambu_analytics.events']
-		request.session.modified = True
-		return True
+        del request.session['bambu_analytics.events']
+        request.session.modified = True
+        return True
 
-	return False
+    return False
+
 
 def track_event(request, event, **kwargs):
-	"""
+    """
     Let's say you have a contact form. In the view that receives the form
     data, you want to track the successful submission of form data and then
     redirect the user to a page thanking them for getting in touch.
@@ -57,17 +60,19 @@ def track_event(request, event, **kwargs):
     user back to a page that will load and render the ``tracking`` template
     tag. Otherwise the event will be stored in the user's session cookie,
     but won't be tracked by your provider.
-	"""
-	_init_tracker(request)
+    """
+    _init_tracker(request)
 
-	try:
-		request._analytics_handler.track(event, **kwargs)
-	except Exception, ex:
-		LOGGER.error('Error tracking analytics event', exc_info = True,
-			extra = {
-				'data': {
-					'event': event,
-					'args': kwargs
-				}
-			}
-		)
+    try:
+        request._analytics_handler.track(event, **kwargs)
+    except Exception as ex:
+        LOGGER.error(
+            'Error tracking analytics event',
+            exc_info=True,
+            extra={
+                'data': {
+                    'event': event,
+                    'args': kwargs
+                }
+            }
+        )
