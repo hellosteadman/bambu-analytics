@@ -54,7 +54,8 @@ Finally, set your Google Analytics ID:
 ANALYTICS_SETTINGS = {
     'UniversalAnalyticsProvider': {
         'ID': 'UA-XXXXXXXX-XX',
-        'TRACK_USER_ID': True,  # track userId by using request.user.id. Note: 'django.contrib.auth.middleware.AuthenticationMiddleware' middleware is required
+        'TRACK_USER_ID': True,  # track userID by using ``request.user.id`` or something else (see next option).
+        'GET_USER_ID_FUNC': lambda request: getattr(getattr(request, 'user', None), 'pk', None),  # this is default function that gets request.user.pk from request as UserID. For example you can add some middleware that generates and sets ``request.analytics_ id`` and your ``"GET_USER_ID_FUNC"`` should be just ``lambda request: request.analytics_id``. Note: 'django.contrib.auth.middleware.AuthenticationMiddleware' middleware is required for default function
     }
 }
 ```

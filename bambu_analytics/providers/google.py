@@ -246,14 +246,17 @@ class UniversalAnalyticsProvider(ProviderBase):
             'id': self.settings['ID'],
             'domain': request.META.get('HTTP_HOST'),
             'queue': queue,
-            'DEBUG': getattr(settings, 'DEBUG', True)
+            'DEBUG': getattr(settings, 'DEBUG', True),
+            'user_id': None,
         }
 
-        user_id = getattr(getattr(request, 'user', None), 'id', None)
-        if self.settings.get('TRACK_USER_ID', False) and user_id:
-            context['user_id'] = user_id
-        else:
-            context['user_id'] = None
+        get_user_id = self.settings.get(
+            'GET_USER_ID_FUNC',
+            lambda request: getattr(getattr(request, 'user', None), 'pk', None)
+        )
+
+        if self.settings.get('TRACK_USER_ID', False):
+            context['user_id'] = get_user_id(request)
 
         return render_to_string(
             'analytics/universal.inc.html',
